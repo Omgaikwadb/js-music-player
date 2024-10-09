@@ -16,10 +16,8 @@ let track_index = 0;
 let isPlaying = false;
 let updateTimer;
 
-// Create new audio element
 let curr_track = document.createElement('audio');
 
-// Define the tracks that have to be played
 let track_list = [
   {
     name: "Night Owl",
@@ -37,23 +35,9 @@ let track_list = [
     name: "Shipping Lanes",
     artist: "Chad Crouch",
     image: "https://images.pexels.com/photos/1717969/pexels-photo-1717969.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=250&w=250",
-    path: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Chad_Crouch/Arps/Chad_Crouch_-_Shipping_Lanes.mp3",
+    path: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Chad_Crouch/Arps/Chad_Crouch_-_Shipping_Lanes.mp3"
   },
 ];
-
-function random_bg_color() {
-
-  // Get a number between 64 to 256 (for getting lighter colors)
-  let red = Math.floor(Math.random() * 256) + 64;
-  let green = Math.floor(Math.random() * 256) + 64;
-  let blue = Math.floor(Math.random() * 256) + 64;
-
-  // Construct a color withe the given values
-  let bgColor = "rgb(" + red + "," + green + "," + blue + ")";
-
-  // Set the background to that color
-  document.body.style.background = bgColor;
-}
 
 function loadTrack(track_index) {
   clearInterval(updateTimer);
@@ -68,7 +52,7 @@ function loadTrack(track_index) {
 
   updateTimer = setInterval(seekUpdate, 1000);
   curr_track.addEventListener("ended", nextTrack);
-  random_bg_color();
+  updatePlaylistHighlight();
 }
 
 function resetValues() {
@@ -77,7 +61,6 @@ function resetValues() {
   seek_slider.value = 0;
 }
 
-// Load the first track in the tracklist
 loadTrack(track_index);
 
 function playpauseTrack() {
@@ -94,21 +77,19 @@ function playTrack() {
 function pauseTrack() {
   curr_track.pause();
   isPlaying = false;
-  playpause_btn.innerHTML = '<i class="fa fa-play-circle fa-5x"></i>';;
+  playpause_btn.innerHTML = '<i class="fa fa-play-circle fa-5x"></i>';
 }
 
 function nextTrack() {
-  if (track_index < track_list.length - 1)
-    track_index += 1;
+  if (track_index < track_list.length - 1) track_index += 1;
   else track_index = 0;
   loadTrack(track_index);
   playTrack();
 }
 
 function prevTrack() {
-  if (track_index > 0)
-    track_index -= 1;
-  else track_index = track_list.length;
+  if (track_index > 0) track_index -= 1;
+  else track_index = track_list.length - 1;
   loadTrack(track_index);
   playTrack();
 }
@@ -124,10 +105,8 @@ function setVolume() {
 
 function seekUpdate() {
   let seekPosition = 0;
-
   if (!isNaN(curr_track.duration)) {
     seekPosition = curr_track.currentTime * (100 / curr_track.duration);
-
     seek_slider.value = seekPosition;
 
     let currentMinutes = Math.floor(curr_track.currentTime / 60);
@@ -135,14 +114,39 @@ function seekUpdate() {
     let durationMinutes = Math.floor(curr_track.duration / 60);
     let durationSeconds = Math.floor(curr_track.duration - durationMinutes * 60);
 
-    if (currentSeconds < 10) { currentSeconds = "0" + currentSeconds; }
-    if (durationSeconds < 10) { durationSeconds = "0" + durationSeconds; }
-    if (currentMinutes < 10) { currentMinutes = "0" + currentMinutes; }
-    if (durationMinutes < 10) { durationMinutes = "0" + durationMinutes; }
+    if (currentSeconds < 10) currentSeconds = "0" + currentSeconds;
+    if (durationSeconds < 10) durationSeconds = "0" + durationSeconds;
 
     curr_time.textContent = currentMinutes + ":" + currentSeconds;
     total_duration.textContent = durationMinutes + ":" + durationSeconds;
   }
 }
 
+// Generate Playlist
+function generatePlaylist() {
+  const playlistContainer = document.getElementById('playlist');
+  track_list.forEach((track, index) => {
+    const listItem = document.createElement('li');
+    listItem.classList.add('track');
+    listItem.textContent = `${track.name} - ${track.artist}`;
+    listItem.setAttribute('data-index', index);
+    listItem.onclick = () => {
+      track_index = index;
+      loadTrack(track_index);
+      playTrack();
+    };
+    playlistContainer.appendChild(listItem);
+  });
+}
 
+// Update the highlighted track in playlist
+function updatePlaylistHighlight() {
+  const tracks = document.querySelectorAll('.track');
+  tracks.forEach((track) => {
+    track.classList.remove('active');
+  });
+  tracks[track_index].classList.add('active');
+}
+
+// Generate the playlist dynamically
+generatePlaylist();
