@@ -1,18 +1,19 @@
+/* General body styles */
 body {
   background-color: lightgreen;
-
-  /* Smoothly transition the background color */
-  transition: background-color .5s;
+  transition: background-color 0.5s; /* Smooth transition for background color */
 }
 
+/* Player container */
 .player {
-  height: 95vh;
+  height: 70vh;
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
 }
 
+/* Details of the currently playing track */
 .details {
   display: flex;
   align-items: center;
@@ -25,7 +26,6 @@ body {
   margin: 25px;
   height: 250px;
   width: 250px;
-  background-image: url("https://images.pexels.com/photos/262034/pexels-photo-262034.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260");
   background-size: cover;
   border-radius: 15%;
 }
@@ -42,6 +42,7 @@ body {
   font-size: 1.5rem;
 }
 
+/* Control buttons */
 .buttons {
   display: flex;
   flex-direction: row;
@@ -51,15 +52,14 @@ body {
 .playpause-track, .prev-track, .next-track {
   padding: 25px;
   opacity: 0.8;
-
-  /* Smoothly transition the opacity */
-  transition: opacity .2s;
+  transition: opacity 0.2s; /* Smooth transition for button opacity */
 }
 
 .playpause-track:hover, .prev-track:hover, .next-track:hover {
   opacity: 1.0;
 }
 
+/* Slider container (for seek and volume) */
 .slider_container {
   width: 75%;
   max-width: 400px;
@@ -68,19 +68,21 @@ body {
   align-items: center;
 }
 
-/* Modify the appearance of the slider */
+/* Seek and volume sliders */
 .seek_slider, .volume_slider {
-  -webkit-appearance: none;
+  -webkit-appearance: none; /* Remove default browser styling */
   -moz-appearance: none;
   appearance: none;
   height: 5px;
   background: black;
   opacity: 0.7;
-  -webkit-transition: .2s;
-  transition: opacity .2s;
+  transition: opacity 0.2s;
 }
 
-/* Modify the appearance of the slider thumb */
+.seek_slider:hover, .volume_slider:hover {
+  opacity: 1.0;
+}
+
 .seek_slider::-webkit-slider-thumb, .volume_slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -92,10 +94,6 @@ body {
   border-radius: 50%;
 }
 
-.seek_slider:hover, .volume_slider:hover {
-  opacity: 1.0;
-}
-
 .seek_slider {
   width: 60%;
 }
@@ -104,14 +102,48 @@ body {
   width: 30%;
 }
 
+/* Time display (current and total duration) */
 .current-time, .total-duration {
   padding: 10px;
 }
 
+/* Volume icons */
 i.fa-volume-down, i.fa-volume-up {
   padding: 10px;
 }
 
+/* Play, pause, and navigation buttons */
 i.fa-play-circle, i.fa-pause-circle, i.fa-step-forward, i.fa-step-backward {
   cursor: pointer;
+}
+
+/* Playlist container */
+.playlist {
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+/* Playlist track styles */
+#playlist {
+  list-style-type: none;
+  padding: 0;
+}
+
+#playlist .track {
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+#playlist .track:hover {
+  background-color: #d3d3d3; /* Color change on hover */
+}
+
+#playlist .track.active {
+  background-color: #6c5ce7; /* Highlighted background for currently playing track */
+  color: white; /* White text for active track */
 }
